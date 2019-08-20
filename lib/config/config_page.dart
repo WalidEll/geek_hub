@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geek_hub/home/index.dart';
+import 'package:geek_hub/activity/activity_page.dart';
+import 'package:geek_hub/activity/index.dart';
 import 'package:geek_hub/utils/geek_hub.dart';
 import 'index.dart';
 
@@ -53,7 +54,7 @@ class _ConfigPageState extends State<ConfigPage> {
                   elevation: 0.0,
                 ),
               ),
-               home: HomePage(),
+               home: ActivityPage(),
             );
           },
         ));

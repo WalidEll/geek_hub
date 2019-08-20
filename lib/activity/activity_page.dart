@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:geek_hub/home/home_screen.dart';
-import 'package:geek_hub/home/home_widgets/events/index.dart';
 import 'package:geek_hub/shared/geek_hub_scafflod.dart';
-import 'home_widgets/trending/index.dart';
-import 'index.dart';
+
+import 'activity_widgets/events/index.dart';
+import 'activity_widgets/trending/index.dart';
+
 
 class ActivityPage extends StatefulWidget {
   @override
