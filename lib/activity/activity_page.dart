@@ -5,12 +5,12 @@ import 'package:geek_hub/shared/geek_hub_scafflod.dart';
 import 'home_widgets/trending/index.dart';
 import 'index.dart';
 
-class HomePage extends StatefulWidget {
+class ActivityPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _ActivityPageState createState() => _ActivityPageState();
 }
 
-class _HomePageState extends State<HomePage>
+class _ActivityPageState extends State<ActivityPage>
     with SingleTickerProviderStateMixin {
   var _eventsBloc = EventsBloc();
   var _trendingBloc = TrendingBloc();
