@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geek_hub/model/github_repository.dart';
@@ -51,13 +52,14 @@ class TrendingScreenState extends State<TrendingScreen> {
         }
         if (currentState is TrendingStateLoaded) {
           TrendingStateLoaded state = currentState;
-          return ListView.builder(
+          return ListView.separated(
+            itemCount: state.repositories.length,
+            separatorBuilder: (BuildContext context, int index) => Divider(color: Colors.grey,),
             itemBuilder: (BuildContext context, int index) {
               return index >= state.repositories.length
                   ? Text("loading")
                   : RepositoryCard(repository: state.repositories[index]);
             },
-            itemCount: state.repositories.length,
           );
         }
         return Center(
@@ -74,12 +76,17 @@ class RepositoryCard extends StatelessWidget {
   const RepositoryCard({Key key, this.repository}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
+    return  Column(
         children: <Widget>[
           ListTile(
-            leading: CircleAvatar(
-              backgroundImage: Image.network(repository.owner.avatarUrl).image,
+            leading: CachedNetworkImage(
+              imageUrl: repository.owner.avatarUrl,
+              imageBuilder: (context, imageProvider) => CircleAvatar(
+                backgroundImage: imageProvider,
+                backgroundColor: Colors.white,
+              ),
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
             title: Text(repository.fullName),
             subtitle: (Row(
@@ -98,7 +105,6 @@ class RepositoryCard extends StatelessWidget {
             )),
           ),
         ],
-      ),
     );
   }
 }
