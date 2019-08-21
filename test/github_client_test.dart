@@ -10,6 +10,5 @@ void main() {
     String query = "created:>$date30DaysEarlier";
     SearchResult searchResult = await client.search(query);
     expect(searchResult.items.length, 30);
-    expect(searchResult.nextPage, 2);
   });
 }
