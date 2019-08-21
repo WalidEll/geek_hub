@@ -9,7 +9,7 @@ void main() {
     String date30DaysEarlier = DateUtil.getEarlierDate(Duration(days: 30));
     String query = "created:>$date30DaysEarlier";
     SearchResult searchResult = await client.search(query);
-    expect(searchResult.items.length, 30);
+    expect(searchResult.items.length, 10);
   });
    test('Test Github Client load two pages and expect 60 repo', () async {
     GithubClient client = GithubClient();
@@ -21,6 +21,6 @@ void main() {
     repositories.addAll(searchResult.items);
     searchResult = await client.search(query,page: page++);
     repositories.addAll(searchResult.items);
-    expect(repositories.length, 60);
+    expect(repositories.length, 20);
   });
 }
