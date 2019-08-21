@@ -13,8 +13,8 @@ class GithubClient {
     this.baseUrl = "https://api.github.com/search/repositories",
   }) : this.httpClient = httpClient ?? http.Client();
 
-  Future<SearchResult> search(String query,{String sort="",String order=""}) async {
-    final response = await httpClient.get(Uri.parse("$baseUrl?q=$query&sort=$sort&order=$order"));
+  Future<SearchResult> search(String query,{int page=1,String sort="",String order=""}) async {
+    final response = await httpClient.get(Uri.parse("$baseUrl?q=$query&sort=$sort&order=$order&page=$page"));
     final results = json.decode(response.body);
 
     if (response.statusCode == 200) {
