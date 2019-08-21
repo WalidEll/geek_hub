@@ -11,4 +11,16 @@ void main() {
     SearchResult searchResult = await client.search(query);
     expect(searchResult.items.length, 30);
   });
+   test('Test Github Client load two pages and expect 60 repo', () async {
+    GithubClient client = GithubClient();
+    String date30DaysEarlier = DateUtil.getEarlierDate(Duration(days: 30));
+    String query = "created:>$date30DaysEarlier";
+    int page=0;
+    List<Repository> repositories=[];
+    SearchResult searchResult = await client.search(query,page: page++);
+    repositories.addAll(searchResult.items);
+    searchResult = await client.search(query,page: page++);
+    repositories.addAll(searchResult.items);
+    expect(repositories.length, 60);
+  });
 }

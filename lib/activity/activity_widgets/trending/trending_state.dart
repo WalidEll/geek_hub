@@ -1,28 +1,44 @@
 import 'package:equatable/equatable.dart';
+import 'package:geek_hub/model/github_repository.dart';
 import 'package:meta/meta.dart';
 
 @immutable
 abstract class TrendingState extends Equatable {
   TrendingState([List props = const <dynamic>[]]) : super(props);
-  TrendingState getStateCopy();
 }
 
-class UnTrendingState extends TrendingState {
+class TrendingUninitialized extends TrendingState {
   @override
-  String toString() => 'UnTrendingState';
-  @override
-  TrendingState getStateCopy() {
-    return UnTrendingState();
-  }
+  String toString() => 'TrendingUninitialized';
 }
 
-class InTrendingState extends TrendingState {
+class TrendingStateLoading extends TrendingState {
   @override
   String toString() => 'InTrendingState';
-  @override
-  TrendingState getStateCopy() {
-    return InTrendingState();
+}
+
+class TrendingStateLoaded extends TrendingState {
+  final List<Repository> repositories;
+  final int nextPage;
+  TrendingStateLoaded(this.repositories,this.nextPage)
+      : super([repositories,nextPage]);
+  TrendingStateLoaded copyWith({
+    List<Repository> repositories,
+    bool hasReachedMax,
+  }) {
+    return TrendingStateLoaded(
+      repositories ?? this.repositories,
+      nextPage ?? this.nextPage,
+    );
   }
+
+  @override
+  String toString() => 'TrendingStateSuccess { items: ${repositories.length} }';
+}
+
+class EmptyTrendingState extends TrendingState {
+  @override
+  String toString() => 'EmptyTrendingState';
 }
 
 class ErrorTrendingState extends TrendingState {
@@ -32,8 +48,4 @@ class ErrorTrendingState extends TrendingState {
 
   @override
   String toString() => 'ErrorTrendingState';
-  @override
-  TrendingState getStateCopy() {
-    return ErrorTrendingState(this.errorMessage);
-  }
 }

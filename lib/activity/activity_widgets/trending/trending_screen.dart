@@ -7,25 +7,25 @@ class TrendingScreen extends StatefulWidget {
   const TrendingScreen({
     Key key,
     @required TrendingBloc trendingBloc,
-  })  : _homeBloc = trendingBloc,
+  })  : _trendingBloc = trendingBloc,
         super(key: key);
 
-  final TrendingBloc _homeBloc;
+  final TrendingBloc _trendingBloc;
 
   @override
   TrendingScreenState createState() {
-    return TrendingScreenState(_homeBloc);
+    return TrendingScreenState(_trendingBloc);
   }
 }
 
 class TrendingScreenState extends State<TrendingScreen> {
-  final TrendingBloc _homeBloc;
-  TrendingScreenState(this._homeBloc);
+  final TrendingBloc _trendingBloc;
+  TrendingScreenState(this._trendingBloc);
 
   @override
   void initState() {
     super.initState();
-    this._homeBloc.dispatch(LoadTrendingEvent());
+    this._trendingBloc.dispatch(OnLoadingMoreTrends());
   }
 
   @override
@@ -36,14 +36,32 @@ class TrendingScreenState extends State<TrendingScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TrendingBloc, TrendingState>(
-      bloc: widget._homeBloc,
+      bloc: widget._trendingBloc,
       builder: (context, currentState) {
-        if (currentState is UnTrendingState) {
+        if (currentState is TrendingUninitialized) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
-        return Center(child: Text("Trending"),);
+        if (currentState is ErrorTrendingState) {
+          return Center(
+            child: Text('failed to fetch posts'),
+          );
+        }
+        if (currentState is TrendingStateLoaded) {
+          TrendingStateLoaded state = currentState;
+          return ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              return index >= state.repositories.length
+                  ? Text("loading")
+                  : Text(state.repositories[index].fullName);
+            },
+            itemCount: state.repositories.length,
+          );
+        }
+        return Center(
+          child: Text("Trending"),
+        );
       },
     );
   }

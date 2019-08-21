@@ -1,7 +1,11 @@
 import 'package:bloc/bloc.dart';
+import 'package:geek_hub/model/github_serach.dart';
+import 'package:geek_hub/network/github_client.dart';
+import 'package:geek_hub/utils/date_util.dart';
 import 'index.dart';
+
 class TrendingBloc extends Bloc<TrendingEvent, TrendingState> {
- static final TrendingBloc _homeBlocSingleton = TrendingBloc._internal();
+  static final TrendingBloc _homeBlocSingleton = TrendingBloc._internal();
 
   factory TrendingBloc() {
     return _homeBlocSingleton;
@@ -10,18 +14,25 @@ class TrendingBloc extends Bloc<TrendingEvent, TrendingState> {
   TrendingBloc._internal();
 
   @override
-  TrendingState get initialState => UnTrendingState();
+  TrendingState get initialState => TrendingUninitialized();
 
   @override
   Stream<TrendingState> mapEventToState(
     TrendingEvent event,
   ) async* {
-    try {
-      yield UnTrendingState();
-      yield await event.applyAsync(currentState: currentState, bloc: this);
-    } catch (_, stackTrace) {
-      print('$_ $stackTrace');
-      yield currentState;
+    if (event is OnLoadingMoreTrends) {
+      try {
+        if (currentState is TrendingUninitialized) {
+          GithubClient client = GithubClient();
+          String date30DaysEarlier =
+              DateUtil.getEarlierDate(Duration(days: 30));
+          String query = "created:>$date30DaysEarlier";
+          final searchResult = await client.search(query);
+          yield TrendingStateLoaded(searchResult.items,2);
+        }
+      } catch (_) {
+        yield ErrorTrendingState(_);
+      }
     }
   }
-  }
+}
