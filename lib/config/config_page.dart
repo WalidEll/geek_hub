@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geek_hub/activity/activity_page.dart';
-import 'package:geek_hub/activity/index.dart';
+import 'package:geek_hub/geekhub/index.dart';
 import 'package:geek_hub/utils/geek_hub.dart';
 import 'index.dart';
 

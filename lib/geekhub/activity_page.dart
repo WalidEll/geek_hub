@@ -39,7 +39,7 @@ class _ActivityPageState extends State<ActivityPage>
   @override
   Widget build(BuildContext context) {
     return GeekHubScaffold(
-      title: "GeekHub Activity",
+      title: "GeekHub",
       body: TabBarView(
         controller: _tabController,
         children: [
