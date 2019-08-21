@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geek_hub/model/github_repository.dart';
 
 import 'index.dart';
 
@@ -54,7 +55,7 @@ class TrendingScreenState extends State<TrendingScreen> {
             itemBuilder: (BuildContext context, int index) {
               return index >= state.repositories.length
                   ? Text("loading")
-                  : Text(state.repositories[index].fullName);
+                  : RepositoryCard(repository: state.repositories[index]);
             },
             itemCount: state.repositories.length,
           );
@@ -63,6 +64,41 @@ class TrendingScreenState extends State<TrendingScreen> {
           child: Text("Trending"),
         );
       },
+    );
+  }
+}
+
+class RepositoryCard extends StatelessWidget {
+  final Repository repository;
+
+  const RepositoryCard({Key key, this.repository}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        children: <Widget>[
+          ListTile(
+            leading: CircleAvatar(
+              backgroundImage: Image.network(repository.owner.avatarUrl).image,
+            ),
+            title: Text(repository.fullName),
+            subtitle: (Row(
+              children: <Widget>[
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        repository.description,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )),
+          ),
+        ],
+      ),
     );
   }
 }
