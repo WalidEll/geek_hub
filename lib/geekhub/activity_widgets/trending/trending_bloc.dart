@@ -21,15 +21,20 @@ class TrendingBloc extends Bloc<TrendingEvent, TrendingState> {
     TrendingEvent event,
   ) async* {
     if (event is OnLoadingMoreTrends) {
+      GithubClient client = GithubClient();
+      String date30DaysEarlier = DateUtil.getEarlierDate(Duration(days: 30));
+      String query = "created:>$date30DaysEarlier";
       try {
         if (currentState is TrendingUninitialized) {
-          GithubClient client = GithubClient();
-          String date30DaysEarlier =
-              DateUtil.getEarlierDate(Duration(days: 30));
-          String query = "created:>$date30DaysEarlier";
           final searchResult = await client.search(query);
-          yield TrendingStateLoaded(searchResult.items,2);
+          yield TrendingStateLoaded(searchResult.items, 2);
         }
+        if (currentState is TrendingStateLoaded) {
+          TrendingStateLoaded state=currentState;
+          final searchResult = await client.search(query,page: state.nextPage);
+          yield  TrendingStateLoaded(state.repositories + searchResult.items,state.nextPage+1);
+        }
+        print(event);
       } catch (_) {
         yield ErrorTrendingState(_);
       }

@@ -10,11 +10,11 @@ abstract class TrendingEvent extends Equatable {
 
 class OnLoadingMoreTrends extends TrendingEvent {
   @override
-  String toString() => 'TextChanged';
+  String toString() => 'OnLoadingMoreTrends';
 }
 
 class OnRefreshingTrends extends TrendingEvent {
   OnRefreshingTrends() : super([]);
   @override
-  String toString() => 'TextChanged';
+  String toString() => 'OnRefreshingTrends';
 }
