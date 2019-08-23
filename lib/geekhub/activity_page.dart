@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:geek_hub/shared/geek_hub_scafflod.dart';
 
 import 'activity_widgets/events/index.dart';
-import 'activity_widgets/trending/index.dart';
 
 
 class ActivityPage extends StatefulWidget {
@@ -13,11 +12,10 @@ class ActivityPage extends StatefulWidget {
 class _ActivityPageState extends State<ActivityPage>
     with SingleTickerProviderStateMixin {
   var _eventsBloc = EventsBloc();
-  var _trendingBloc = TrendingBloc();
   final List<Tab> myTabs = <Tab>[
     Tab(
-      text: 'Trending',
-      icon: Icon(Icons.trending_up),
+      text: 'Feed',
+      icon: Icon(Icons.rss_feed),
     ), Tab(
       text: 'Events',
       icon: Icon(Icons.event),
@@ -43,7 +41,7 @@ class _ActivityPageState extends State<ActivityPage>
       body: TabBarView(
         controller: _tabController,
         children: [
-          TrendingScreen(trendingBloc: _trendingBloc,),
+          Container(),
           EventsScreen(eventsBloc: _eventsBloc,),
         ],
       ),
