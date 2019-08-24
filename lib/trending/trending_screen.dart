@@ -7,23 +7,14 @@ import 'package:geek_hub/utils/geek_hub.dart';
 import 'index.dart';
 
 class TrendingScreen extends StatefulWidget {
-  const TrendingScreen({
-    Key key,
-    @required TrendingBloc trendingBloc,
-  })  : _trendingBloc = trendingBloc,
-        super(key: key);
-
-  final TrendingBloc _trendingBloc;
-
   @override
   TrendingScreenState createState() {
-    return TrendingScreenState(_trendingBloc);
+    return TrendingScreenState();
   }
 }
 
 class TrendingScreenState extends State<TrendingScreen> {
-  final TrendingBloc _trendingBloc;
-  TrendingScreenState(this._trendingBloc);
+  final TrendingBloc _trendingBloc = TrendingBloc();
   final _scrollController = ScrollController();
 
   @override
@@ -42,7 +33,7 @@ class TrendingScreenState extends State<TrendingScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TrendingBloc, TrendingState>(
-      bloc: widget._trendingBloc,
+      bloc: _trendingBloc,
       builder: (context, currentState) {
         if (currentState is TrendingUninitialized) {
           return Center(
@@ -57,7 +48,7 @@ class TrendingScreenState extends State<TrendingScreen> {
         if (currentState is TrendingStateLoaded) {
           TrendingStateLoaded state = currentState;
           return ListView.separated(
-            itemCount: state.repositories.length+1,
+            itemCount: state.repositories.length + 1,
             separatorBuilder: (BuildContext context, int index) => Divider(
               color: Colors.grey,
             ),
@@ -89,6 +80,7 @@ class RepositoryCard extends StatelessWidget {
   final Repository repository;
 
   const RepositoryCard({Key key, this.repository}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -111,7 +103,7 @@ class RepositoryCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      repository.description??'',
+                      repository.description ?? '',
                     ),
                   ],
                 ),
@@ -123,6 +115,7 @@ class RepositoryCard extends StatelessWidget {
     );
   }
 }
+
 class BottomLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

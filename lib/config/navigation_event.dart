@@ -1,0 +1,2 @@
+
+enum NavigationEvent { ActivityNavigationEvent, TrendingNavigationEvent }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geek_hub/geekhub/index.dart';
+import 'package:geek_hub/trending/index.dart';
 import 'package:geek_hub/utils/geek_hub.dart';
 import 'index.dart';
 
@@ -11,6 +12,7 @@ class ConfigPage extends StatefulWidget {
 
 class _ConfigPageState extends State<ConfigPage> {
   ConfigBloc configBloc;
+  NavigationBloc navigationBloc;
 
   @override
   void initState() {
@@ -20,14 +22,22 @@ class _ConfigPageState extends State<ConfigPage> {
 
   setupApp() {
     configBloc = ConfigBloc();
+    navigationBloc = NavigationBloc();
     configBloc.darkModeOn =
         GeekHub.prefs.getBool(GeekHub.darkModePref) ?? false;
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        builder: (context) => configBloc,
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider<ConfigBloc>(
+            builder: (BuildContext context) => configBloc,
+          ),
+          BlocProvider<NavigationBloc>(
+            builder: (BuildContext context) => navigationBloc,
+          ),
+        ],
         child: BlocBuilder<ConfigBloc, ConfigState>(
           builder: (context, state) {
             return MaterialApp(
@@ -37,8 +47,9 @@ class _ConfigPageState extends State<ConfigPage> {
                 //* Custom Google Font
                 // fontFamily: Devfest.google_sans_family,
                 primarySwatch: Colors.red,
-                primaryColor:
-                    configBloc.darkModeOn ? Colors.black : Color.fromRGBO(36, 41, 46, 1),
+                primaryColor: configBloc.darkModeOn
+                    ? Colors.black
+                    : Color.fromRGBO(36, 41, 46, 1),
                 disabledColor: Colors.grey,
                 cardColor: configBloc.darkModeOn ? Colors.black : Colors.white,
                 canvasColor:
@@ -49,11 +60,16 @@ class _ConfigPageState extends State<ConfigPage> {
                     colorScheme: configBloc.darkModeOn
                         ? ColorScheme.dark()
                         : ColorScheme.light()),
+                dividerColor: configBloc.darkModeOn ? Colors.white : Colors.grey,
                 appBarTheme: AppBarTheme(
                   elevation: 0.0,
                 ),
               ),
-               home: ActivityPage(),
+              routes: {
+                '/': (context) => ActivityPage(),
+                '/trending': (context) => TrendingPage(),
+              },
+              initialRoute: '/trending',
             );
           },
         ));
